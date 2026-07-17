@@ -1,0 +1,1200 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fetch360° Solution | 360° Digital Solutions for Every Business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0B0D1A;--primary:#D4A843;--cyan:#22D3EE;--amber:#D4A843;--text:#F1F5F9;--muted:#94A3B8;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#D4A843,#F5D77A,#D4A843)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+h1,h2,h3,h4,h5,h6{font-family:'Plus Jakarta Sans',sans-serif}
+a{text-decoration:none;color:inherit}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-title{text-align:center;margin-bottom:60px}
+.section-title h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:12px}
+.section-title p{color:var(--muted);font-size:1rem;max-width:560px;margin:0 auto}
+.section-title .line{width:60px;height:4px;background:var(--gradient);margin:16px auto 0;border-radius:2px}
+.mono{font-family:'JetBrains Mono',monospace}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;border-radius:60px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.95rem;cursor:pointer;border:none;transition:all .35s cubic-bezier(.4,0,.2,1)}
+.btn-primary{background:var(--gradient);color:#fff;box-shadow:0 4px 30px rgba(212,168,67,0.35)}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 40px rgba(212,168,67,0.5)}
+.btn-outline{background:transparent;color:var(--text);border:2px solid rgba(255,255,255,0.15)}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 30px rgba(245,215,122,0.2)}
+
+/* Loader */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s,visibility .6s}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.loader-orb{width:90px;height:90px;border-radius:50%;background:conic-gradient(from 0deg,transparent,var(--primary),transparent,var(--primary),transparent);animation:spin360 1.5s linear infinite;position:relative;display:flex;align-items:center;justify-content:center}
+.loader-label{margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.loader-center{color:var(--primary)}
+@keyframes spin360{to{transform:rotate(360deg)}}
+
+/* Three.js Canvas */
+#hero-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* Navbar */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 0;transition:all .4s}
+.navbar.scrolled{background:rgba(11,13,26,0.95);backdrop-filter:blur(20px);padding:12px 0;box-shadow:0 4px 30px rgba(0,0,0,0.4)}
+.navbar .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.4rem;display:flex;align-items:center;gap:10px}
+.nav-logo img{height:42px;width:auto;border-radius:8px}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:.88rem;font-weight:500;color:var(--muted);transition:color .3s;position:relative;padding:4px 0}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:50%;width:0;height:2px;background:var(--gradient);transition:all .3s;transform:translateX(-50%)}
+.nav-links a:hover{color:var(--text)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{padding:10px 22px!important;font-size:.82rem!important}
+.hamburger{display:none;flex-direction:column;gap:6px;cursor:pointer;z-index:1001;padding:4px}
+.hamburger span{width:26px;height:2.5px;background:var(--text);transition:all .3s;border-radius:2px}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
+.mobile-menu{display:none;position:fixed;top:0;right:-100%;width:300px;height:100vh;background:rgba(11,13,26,0.98);backdrop-filter:blur(30px);z-index:999;padding:100px 36px 36px;transition:right .4s;flex-direction:column;gap:6px;border-left:1px solid rgba(255,255,255,0.04)}
+.mobile-menu.open{right:0}
+.mobile-menu a{font-size:1rem;font-weight:500;color:var(--muted);padding:12px 16px;border-radius:10px;transition:all .3s}
+.mobile-menu a:hover{color:var(--primary);background:rgba(0,0,0,0.04)}
+.mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;opacity:0;transition:opacity .3s}
+.mobile-overlay.show{display:block;opacity:1}
+
+/* Reveal Animation */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1)}
+.reveal.active{opacity:1;transform:translateY(0)}
+
+/* All sections z-index above canvas */
+section,.footer{position:relative;z-index:1}
+section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
+
+/* Hero */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:80px;background:transparent !important}
+.hero-content{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.hero-left .tagline{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--primary);margin-bottom:20px;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+.hero-left .tagline .dot{width:8px;height:8px;border-radius:50%;background:var(--primary);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.hero-left h1{font-size:clamp(2.5rem,5.5vw,4.2rem);font-weight:700;line-height:1.08;margin-bottom:24px}
+.hero-left h1 .degree{display:inline-block;animation:spin360 3s linear infinite;color:var(--primary)}
+.hero-left .subtext{font-size:1.05rem;color:var(--muted);margin-bottom:40px;max-width:520px;line-height:1.8}
+.hero-buttons{display:flex;gap:16px;flex-wrap:wrap}
+.hero-right{display:flex;justify-content:center;align-items:center;position:relative;height:400px}
+.scroll-mouse{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:.75rem;font-family:'JetBrains Mono',monospace}
+.scroll-mouse .mouse{width:22px;height:36px;border:2px solid rgba(0,0,0,0.25);border-radius:11px;position:relative}
+.scroll-mouse .mouse::after{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:3px;height:7px;background:var(--primary);border-radius:2px;animation:mouseScroll 1.5s ease-in-out infinite}
+@keyframes mouseScroll{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(10px)}}
+
+/* About */
+.about{padding:120px 0}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.about-text p{color:var(--muted);margin-bottom:20px;line-height:1.8}
+.about-text .founder-line{display:flex;align-items:center;gap:14px;margin-top:24px;padding:18px 22px;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;backdrop-filter:blur(10px);transition:all .3s}
+.about-text .founder-line:hover{border-color:var(--primary);transform:translateX(5px)}
+.about-text .founder-line i{color:var(--primary);font-size:1.2rem}
+.counters{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.counter-card{text-align:center;padding:32px 20px;background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;backdrop-filter:blur(10px);transition:all .4s;position:relative;overflow:hidden}
+.counter-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--gradient);transform:scaleX(0);transition:transform .4s}
+.counter-card:hover::before{transform:scaleX(1)}
+.counter-card:hover{transform:translateY(-8px);box-shadow:0 15px 40px rgba(212,168,67,0.15)}
+.counter-card .number{font-family:'Plus Jakarta Sans',sans-serif;font-size:2.5rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.counter-card .label{color:var(--muted);font-size:.82rem;margin-top:4px;font-family:'JetBrains Mono',monospace}
+
+/* Services */
+.services{padding:120px 0}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.service-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:38px 30px;backdrop-filter:blur(10px);transition:all .4s;cursor:pointer;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:2px;background:var(--gradient);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
+.service-card:hover::before{opacity:1}
+.service-card:hover{transform:translateY(-12px);box-shadow:0 25px 50px rgba(212,168,67,0.2)}
+.service-card .icon{width:60px;height:60px;background:linear-gradient(135deg,rgba(212,168,67,0.12),rgba(245,215,122,0.12));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--primary);margin-bottom:22px;transition:all .4s}
+.service-card:hover .icon{transform:scale(1.1) rotate(5deg);box-shadow:0 0 20px rgba(245,215,122,0.25)}
+.service-card h3{font-size:1.15rem;font-weight:600;margin-bottom:12px;transition:color .3s}
+.service-card:hover h3{color:var(--primary)}
+.service-card p{color:var(--muted);font-size:.9rem;line-height:1.7}
+
+/* Why Choose Us */
+.why{padding:120px 0}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.why-card{text-align:center;padding:38px 26px;background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;backdrop-filter:blur(10px);transition:all .4s;position:relative;overflow:hidden}
+.why-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:3px;background:var(--gradient);transform:scaleX(0);transition:transform .4s}
+.why-card:hover::after{transform:scaleX(1)}
+.why-card:hover{transform:translateY(-10px);border-color:rgba(212,168,67,0.3);box-shadow:0 20px 40px rgba(212,168,67,0.15)}
+.why-card .icon{width:68px;height:68px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 20px;transition:all .4s;box-shadow:0 0 20px rgba(212,168,67,0.25)}
+.why-card:hover .icon{transform:scale(1.1) rotate(10deg);box-shadow:0 0 30px rgba(212,168,67,0.45)}
+.why-card h3{font-size:1.05rem;font-weight:600;margin-bottom:10px}
+.why-card p{color:var(--muted);font-size:.85rem;line-height:1.7}
+
+/* Portfolio */
+.portfolio{padding:120px 0}
+.filter-tabs{display:flex;justify-content:center;gap:12px;margin-bottom:40px;flex-wrap:wrap}
+.filter-tab{padding:10px 28px;border-radius:50px;background:var(--glass);border:1px solid var(--glass-border);color:var(--muted);font-size:.88rem;font-weight:500;cursor:pointer;transition:all .3s;font-family:'Inter',sans-serif}
+.filter-tab.active,.filter-tab:hover{background:var(--gradient);color:#fff;border-color:transparent;box-shadow:0 4px 15px rgba(212,168,67,0.3)}
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.portfolio-card{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/3;cursor:pointer;transition:all .5s cubic-bezier(.4,0,.2,1)}
+.portfolio-card.hidden-card{opacity:0;transform:scale(0.8);pointer-events:none;position:absolute;width:0;height:0;overflow:hidden}
+.portfolio-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.portfolio-card .thumb-placeholder{width:100%;height:100%;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.portfolio-card .thumb-placeholder i{font-size:3rem;opacity:.6}
+.portfolio-card .thumb-placeholder span{font-size:.85rem;font-family:'JetBrains Mono',monospace;opacity:.5;letter-spacing:1px}
+.portfolio-card .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.3) 50%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:28px;opacity:0;transition:opacity .4s}
+.portfolio-card:hover .overlay{opacity:1}
+.portfolio-card:hover .thumb-placeholder{transform:scale(1.15)}
+.portfolio-card .overlay h4{font-size:1.1rem;font-weight:600;margin-bottom:6px;transform:translateY(15px);transition:transform .4s}
+.portfolio-card:hover .overlay h4{transform:translateY(0)}
+.portfolio-card .overlay span{color:var(--primary);font-size:.82rem;font-family:'JetBrains Mono',monospace;transform:translateY(15px);transition:transform .4s .1s}
+.portfolio-card:hover .overlay span{transform:translateY(0)}
+
+/* Process */
+.process{padding:120px 0}
+.process-timeline{display:flex;justify-content:space-between;position:relative;padding:0 20px}
+.process-timeline::before{content:'';position:absolute;top:44px;left:70px;right:70px;height:3px;background:rgba(0,0,0,0.06)}
+.process-line{position:absolute;top:44px;left:70px;height:3px;width:0;background:var(--gradient);transition:width 2s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(212,168,67,0.4)}
+.process-line.active{width:calc(100% - 140px)}
+.process-step{text-align:center;position:relative;z-index:2;flex:1}
+.process-step .step-num{width:88px;height:88px;background:var(--bg);border:3px solid rgba(0,0,0,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:700;margin:0 auto 18px;transition:all .6s}
+.process-step.active .step-num{border-color:var(--primary);background:linear-gradient(135deg,rgba(212,168,67,0.12),rgba(245,215,122,0.12));box-shadow:0 0 30px rgba(245,215,122,0.25);transform:scale(1.1)}
+.process-step h4{font-size:.95rem;font-weight:600;margin-bottom:6px}
+.process-step p{color:var(--muted);font-size:.8rem}
+
+/* Testimonials */
+.testimonials{padding:120px 0;overflow:hidden}
+.testimonial-track{display:flex;gap:24px;animation:slideTest 30s linear infinite;width:max-content}
+.testimonial-track:hover{animation-play-state:paused}
+@keyframes slideTest{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.testimonial-card{min-width:400px;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:36px;backdrop-filter:blur(10px);flex-shrink:0;transition:all .4s;position:relative}
+.testimonial-card::before{content:'\201C';position:absolute;top:16px;right:24px;font-size:4.5rem;font-family:Georgia,serif;color:rgba(212,168,67,0.1);line-height:1}
+.testimonial-card:hover{border-color:rgba(212,168,67,0.25);transform:translateY(-5px)}
+.testimonial-card .stars{color:#FBBF24;font-size:.88rem;margin-bottom:16px;letter-spacing:2px}
+.testimonial-card .review{color:var(--muted);font-size:.93rem;line-height:1.8;margin-bottom:22px;font-style:italic}
+.testimonial-card .client-info{display:flex;align-items:center;gap:14px}
+.testimonial-card .avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid var(--glass-border)}
+.testimonial-card .client-name{font-weight:600;font-size:.93rem}
+.testimonial-card .client-role{color:var(--muted);font-size:.78rem;font-family:'JetBrains Mono',monospace}
+
+/* Clients */
+.clients-section{padding:100px 0}
+.marquee-wrapper{overflow:hidden;position:relative}
+.marquee-wrapper::before,.marquee-wrapper::after{content:'';position:absolute;top:0;bottom:0;width:120px;z-index:2}
+.marquee-wrapper::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.marquee-wrapper::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+.marquee-track{display:flex;gap:50px;animation:marquee 25s linear infinite;width:max-content}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.client-logo{flex-shrink:0;width:140px;height:55px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:.82rem;color:var(--muted);transition:all .4s;filter:grayscale(1);opacity:.5}
+.client-logo:hover{filter:grayscale(0);opacity:1;border-color:var(--primary);color:var(--text);transform:translateY(-3px)}
+
+/* Team (Founder + Co-Founder) */
+.founder{padding:120px 0}
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1000px;margin:0 auto}
+.team-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--glass);border:1px solid var(--glass-border);border-radius:24px;padding:48px 32px 36px;backdrop-filter:blur(10px);transition:all .5s}
+.team-card:hover{border-color:rgba(212,168,67,0.3);transform:translateY(-8px);box-shadow:0 20px 50px rgba(212,168,67,0.12)}
+.team-card .photo{width:180px;height:180px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;margin-bottom:24px;flex-shrink:0;transition:transform .4s;border:3px solid var(--primary)}
+.team-card:hover .photo{transform:scale(1.05)}
+.team-card .photo img{width:100%;height:100%;object-fit:cover;border-radius:50%;position:relative;z-index:2}
+.team-card .photo .placeholder-icon{position:relative;z-index:2;font-size:4rem;opacity:.25}
+.team-card .photo::before{content:'';position:absolute;inset:3px;background:var(--bg);border-radius:50%;z-index:1}
+.team-card h3{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.team-card .designation{color:var(--primary);font-size:.88rem;margin-bottom:16px;font-weight:500;font-family:'JetBrains Mono',monospace}
+.team-card p{color:var(--muted);line-height:1.7;margin-bottom:20px;font-size:.92rem}
+.team-card .social-links{display:flex;gap:12px;justify-content:center}
+.team-card .social-links a{width:40px;height:40px;background:rgba(0,0,0,0.04);border:1px solid var(--glass-border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.95rem;transition:all .4s}
+.team-card .social-links a:hover{background:var(--gradient);color:#fff;transform:translateY(-5px) scale(1.1);border-color:transparent;box-shadow:0 8px 20px rgba(212,168,67,0.35)}
+
+/* Contact */
+.contact{padding:120px 0}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.contact-form{display:flex;flex-direction:column;gap:20px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:.85rem;font-weight:500;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.form-group input,.form-group textarea{width:100%;padding:18px 22px;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;color:var(--text);font-family:'Inter',sans-serif;font-size:.95rem;outline:none;transition:all .3s}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--muted)}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--primary);box-shadow:0 0 20px rgba(212,168,67,0.12);background:rgba(0,0,0,0.04)}
+.form-group textarea{min-height:150px;resize:vertical}
+.form-group .error{color:#ef4444;font-size:.8rem;display:none}
+.form-group.has-error input,.form-group.has-error textarea{border-color:#ef4444}
+.form-group.has-error .error{display:block}
+.form-success{display:none;padding:16px 24px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);border-radius:12px;color:#22c55e;font-size:.93rem}
+.form-success.show{display:block}
+.contact-info-cards{display:flex;flex-direction:column;gap:20px}
+.info-card{display:flex;align-items:center;gap:18px;padding:22px;background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;backdrop-filter:blur(10px);transition:all .4s}
+.info-card:hover{border-color:var(--primary);transform:translateX(8px)}
+.info-card .icon{width:50px;height:50px;background:var(--gradient);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.info-card h4{font-size:.93rem;font-weight:600}
+.info-card p{color:var(--muted);font-size:.82rem}
+.contact-socials{display:flex;gap:14px;margin-top:10px}
+.contact-socials a{width:44px;height:44px;background:var(--glass);border:1px solid var(--glass-border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;transition:all .4s}
+.contact-socials a:hover{background:var(--gradient);color:#fff;transform:translateY(-4px) scale(1.1)}
+
+/* Footer */
+.footer{padding:70px 0 30px;border-top:1px solid var(--glass-border);background:rgba(0,0,0,0.3);backdrop-filter:blur(2px)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand .footer-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:1.3rem;margin-bottom:14px}
+.footer-brand p{color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:18px}
+.footer-col h4{font-size:.95rem;font-weight:600;margin-bottom:18px}
+.footer-col a{display:block;color:var(--muted);font-size:.88rem;padding:5px 0;transition:all .3s}
+.footer-col a:hover{color:var(--primary);transform:translateX(5px)}
+.footer-bottom{border-top:1px solid var(--glass-border);padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-bottom p{color:var(--muted);font-size:.82rem}
+
+/* Glow Cursor */
+.glow-cursor{position:fixed;width:350px;height:350px;background:radial-gradient(circle,rgba(212,168,67,0.08),transparent 70%);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);display:none}
+
+/* Responsive */
+@media(max-width:1024px){
+.hero-content{grid-template-columns:1fr;text-align:center}
+.hero-left .subtext{margin:0 auto 40px}
+.hero-buttons{justify-content:center}
+.hero-right{margin-top:40px;height:300px}
+.about-grid{grid-template-columns:1fr;gap:40px}
+.services-grid{grid-template-columns:repeat(2,1fr)}
+.why-grid{grid-template-columns:repeat(2,1fr)}
+.portfolio-grid{grid-template-columns:repeat(2,1fr)}
+.process-timeline{flex-wrap:wrap;gap:30px;justify-content:center}
+.process-timeline::before,.process-line{display:none}
+.founder-content{grid-template-columns:1fr;text-align:center;justify-items:center}
+.founder-info{text-align:center}
+.social-links{justify-content:center}
+.team-grid{grid-template-columns:1fr;gap:30px}
+.team-card{padding:36px 24px 28px}
+.contact-grid{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+.nav-links{display:none}
+.hamburger{display:flex}
+.mobile-menu{display:flex}
+.services-grid{grid-template-columns:1fr}
+.why-grid{grid-template-columns:1fr}
+.portfolio-grid{grid-template-columns:1fr}
+.counters{grid-template-columns:1fr 1fr}
+.testimonial-card{min-width:320px}
+.footer-grid{grid-template-columns:1fr}
+.process-step .step-num{width:64px;height:64px;font-size:1rem}
+.process-step h4{font-size:.85rem}
+.process-step p{font-size:.7rem}
+.team-card .photo{width:140px;height:140px}
+.team-card h3{font-size:1.2rem}
+}
+@media(max-width:480px){
+.hero-left h1{font-size:2rem}
+.counters{grid-template-columns:1fr}
+.hero-buttons{flex-direction:column;align-items:center}
+.btn{width:100%;justify-content:center}
+.filter-tab{padding:8px 18px;font-size:.8rem}
+}
+</style>
+</head>
+<body>
+<!-- Loader -->
+<div id="loader">
+  <div class="loader-orb">
+    <svg width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:2">
+      <defs><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A843"/><stop offset="100%" stop-color="#F5D77A"/></linearGradient></defs>
+      <path d="M50 5 L90 20 L90 55 Q90 80 50 95 Q10 80 10 55 L10 20 Z" fill="url(#g2)" opacity="0.2" stroke="url(#g2)" stroke-width="3"/>
+      <circle cx="55" cy="45" r="14" fill="none" stroke="url(#g2)" stroke-width="2.5"/>
+      <line x1="55" y1="31" x2="55" y2="22" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="55" cy="20" r="2.5" fill="url(#g2)"/>
+      <path d="M42 58 L55 45" stroke="url(#g2)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <p class="loader-label">Loading Experience</p>
+</div>
+
+<!-- Cursor Glow -->
+<div class="glow-cursor" id="glowCursor"></div>
+
+<!-- Three.js Canvas -->
+<canvas id="hero-canvas"></canvas>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="#hero" class="nav-logo">
+      <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A843"/><stop offset="100%" stop-color="#F5D77A"/></linearGradient></defs>
+        <path d="M50 5 L90 20 L90 55 Q90 80 50 95 Q10 80 10 55 L10 20 Z" fill="url(#g1)" opacity="0.15" stroke="url(#g1)" stroke-width="3"/>
+        <path d="M50 15 L80 27 L80 52 Q80 72 50 85 Q20 72 20 52 L20 27 Z" fill="none" stroke="url(#g1)" stroke-width="2" opacity="0.5"/>
+        <circle cx="55" cy="45" r="14" fill="none" stroke="url(#g1)" stroke-width="2.5"/>
+        <line x1="55" y1="31" x2="55" y2="22" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="55" cy="20" r="2.5" fill="url(#g1)"/>
+        <path d="M42 58 L55 45" stroke="url(#g1)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M61 38 Q68 32 72 38" stroke="url(#g1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M63 34 Q72 26 78 34" stroke="url(#g1)" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+      <span>Fetch360<span style="color:var(--primary)">&#176;</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#process">Process</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="https://wa.me/923162770208?text=Hi%20Fetch360%C2%B0%20Solution%2C%20I%20want%20to%20discuss%20a%20project." target="_blank" class="nav-cta btn btn-primary"><i class="fab fa-whatsapp"></i> Get Started</a>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hero">Home</a>
+  <a href="#about">About</a>
+  <a href="#services">Services</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#process">Process</a>
+  <a href="#testimonials">Reviews</a>
+  <a href="#founder">Founder</a>
+  <a href="#contact">Contact</a>
+  <a href="https://wa.me/923162770208?text=Hi%20Fetch360%C2%B0%20Solution%2C%20I%20want%20to%20discuss%20a%20project." target="_blank" style="margin-top:16px;background:linear-gradient(135deg,#D4A843,#F5D77A);color:#fff;border-radius:10px;text-align:center;padding:14px;font-weight:600"><i class="fab fa-whatsapp"></i> Message Us</a>
+</div>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="tagline reveal">
+          <span class="dot"></span>
+          <span class="mono">DIGITAL SOLUTIONS AGENCY</span>
+        </div>
+        <h1 class="reveal">
+          360<span class="degree">&#176;</span> Digital Solutions<br>
+          for <span class="gradient-text">Every Business</span>
+        </h1>
+        <p class="subtext reveal">
+          We craft cutting-edge web experiences, mobile applications, and custom software solutions that propel your business forward in the digital landscape.
+        </p>
+        <div class="hero-buttons reveal">
+          <a href="https://wa.me/923162770208?text=Hi%20Fetch360%C2%B0%20Solution%2C%20I%20want%20to%20discuss%20a%20project." target="_blank" class="btn btn-primary magnetic-btn">
+            <i class="fab fa-whatsapp"></i> Send Message
+          </a>
+          <a href="#portfolio" class="btn btn-outline magnetic-btn">
+            <i class="fas fa-eye"></i> View Our Work
+          </a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="scroll-mouse">
+          <div class="mouse"></div>
+          <span>Scroll Down</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">ABOUT US</p>
+      <h2>Empowering Businesses <span class="gradient-text">Since 2023</span></h2>
+      <div class="line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          Fetch360&#176; Solution is a forward-thinking digital agency dedicated to providing comprehensive technology solutions for businesses of all sizes. We combine creativity with technical expertise to deliver products that make a real impact.
+        </p>
+        <p>
+          From web development and mobile apps to custom software and UI/UX design, our team works tirelessly to ensure every project exceeds expectations. We believe in building long-term partnerships, not just delivering products.
+        </p>
+        <div class="founder-line">
+          <i class="fas fa-user-tie"></i>
+          <div>
+            <strong>Founded by Tuaha Ibn Rafi</strong>
+            <p style="color:var(--muted);font-size:.82rem;margin:0">CEO &amp; Lead Strategist</p>
+          </div>
+        </div>
+      </div>
+      <div class="counters reveal">
+        <div class="counter-card">
+          <div class="number" data-target="50">0</div>
+          <div class="label">Projects Completed</div>
+        </div>
+        <div class="counter-card">
+          <div class="number" data-target="30">0</div>
+          <div class="label">Happy Clients</div>
+        </div>
+        <div class="counter-card">
+          <div class="number" data-target="3">0</div>
+          <div class="label">Years Experience</div>
+        </div>
+        <div class="counter-card">
+          <div class="number" data-target="24" data-suffix="/7">0</div>
+          <div class="label">Support Available</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="services" id="services">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">OUR SERVICES</p>
+      <h2>What We <span class="gradient-text">Offer</span></h2>
+      <p>End-to-end digital solutions tailored to your unique business needs</p>
+      <div class="line"></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="icon"><i class="fas fa-code"></i></div>
+        <h3>Web Development</h3>
+        <p>Responsive, fast, and SEO-optimized websites built with modern frameworks and technologies for maximum impact.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+        <h3>App Development</h3>
+        <p>Native and cross-platform mobile applications for iOS and Android that deliver seamless user experiences.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="icon"><i class="fas fa-cogs"></i></div>
+        <h3>Custom Software</h3>
+        <p>Tailored software solutions designed to streamline your operations and boost overall business efficiency.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="icon"><i class="fas fa-palette"></i></div>
+        <h3>UI/UX Design</h3>
+        <p>Beautiful, intuitive interfaces crafted through research-driven design processes and user-centered thinking.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="icon"><i class="fas fa-shopping-cart"></i></div>
+        <h3>E-Commerce</h3>
+        <p>Full-featured online stores with secure payment integration, inventory management, and analytics dashboards.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="icon"><i class="fas fa-search"></i></div>
+        <h3>SEO &amp; Marketing</h3>
+        <p>Data-driven SEO strategies and digital marketing campaigns that increase visibility and drive organic growth.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">WHY US</p>
+      <h2>Why Choose <span class="gradient-text">Fetch360&#176;</span></h2>
+      <p>We go beyond just writing code - we build digital experiences that drive results</p>
+      <div class="line"></div>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="icon"><i class="fas fa-bolt"></i></div>
+        <h3>Fast Delivery</h3>
+        <p>Agile development process ensures your project is delivered on time without compromising quality.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon"><i class="fas fa-wallet"></i></div>
+        <h3>Affordable Pricing</h3>
+        <p>Competitive pricing models designed to fit businesses of all sizes without hidden charges.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon"><i class="fas fa-star"></i></div>
+        <h3>Modern Design</h3>
+        <p>Cutting-edge design trends and modern aesthetics that make your brand stand out from competitors.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="icon"><i class="fas fa-headset"></i></div>
+        <h3>Dedicated Support</h3>
+        <p>24/7 dedicated support team ready to assist you with any issues or updates post-launch.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Portfolio Section -->
+<section class="portfolio" id="portfolio">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">OUR WORK</p>
+      <h2>Featured <span class="gradient-text">Projects</span></h2>
+      <p>A showcase of our finest work across various industries and platforms</p>
+      <div class="line"></div>
+    </div>
+    <div class="filter-tabs reveal">
+      <button class="filter-tab active" data-filter="all">All</button>
+      <button class="filter-tab" data-filter="web">Websites</button>
+      <button class="filter-tab" data-filter="app">Apps</button>
+      <button class="filter-tab" data-filter="software">Software</button>
+    </div>
+    <div class="portfolio-grid" id="portfolioGrid">
+      <div class="portfolio-card reveal" data-category="web">
+        <div class="thumb-placeholder" style="background:linear-gradient(135deg,#7C3AED,#A855F7)">
+          <img src="assets/images/portfolio/ecommerce.jpg" alt="E-Commerce Platform" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:inherit">
+        </div>
+        <div class="overlay">
+          <h4>E-Commerce Platform</h4>
+          <span class="mono">Web Development</span>
+        </div>
+      </div>
+      <div class="portfolio-card reveal" data-category="app">
+        <div class="thumb-placeholder" style="background:linear-gradient(135deg,#F97316,#FB923C)">
+          <img src="assets/images/portfolio/fooddelivery.jpg" alt="Food Delivery App" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:inherit">
+        </div>
+        <div class="overlay">
+          <h4>Food Delivery App</h4>
+          <span class="mono">Mobile App</span>
+        </div>
+      </div>
+      <div class="portfolio-card reveal" data-category="software">
+        <div class="thumb-placeholder" style="background:linear-gradient(135deg,#1E293B,#334155)">
+          <img src="assets/images/portfolio/erp.jpg" alt="ERP Management System" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:inherit">
+        </div>
+        <div class="overlay">
+          <h4>ERP Management System</h4>
+          <span class="mono">Custom Software</span>
+        </div>
+      </div>
+      <div class="portfolio-card reveal" data-category="web">
+        <div class="thumb-placeholder" style="background:linear-gradient(135deg,#0D9488,#2DD4BF)">
+          <img src="assets/images/portfolio/corporate.jpg" alt="Corporate Website" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:inherit">
+        </div>
+        <div class="overlay">
+          <h4>Corporate Website</h4>
+          <span class="mono">Web Design</span>
+        </div>
+      </div>
+      <div class="portfolio-card reveal" data-category="app">
+        <div class="thumb-placeholder" style="background:linear-gradient(135deg,#7C3AED,#A855F7)">
+          <img src="assets/images/portfolio/fitness.jpg" alt="Fitness Tracker App" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:inherit">
+        </div>
+        <div class="overlay">
+          <h4>Fitness Tracker App</h4>
+          <span class="mono">Mobile App</span>
+        </div>
+      </div>
+      <div class="portfolio-card reveal" data-category="software">
+        <div class="thumb-placeholder" style="background:linear-gradient(135deg,#2563EB,#60A5FA)">
+          <img src="assets/images/portfolio/analytics.jpg" alt="Analytics Dashboard" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:inherit">
+        </div>
+        <div class="overlay">
+          <h4>Analytics Dashboard</h4>
+          <span class="mono">Custom Software</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process Section -->
+<section class="process" id="process">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">OUR PROCESS</p>
+      <h2>How We <span class="gradient-text">Work</span></h2>
+      <p>A streamlined approach to transform your vision into a digital reality</p>
+      <div class="line"></div>
+    </div>
+    <div class="process-timeline reveal">
+      <div class="process-line" id="processLine"></div>
+      <div class="process-step" data-step="1">
+        <div class="step-num">01</div>
+        <h4>Discovery</h4>
+        <p>Understanding your goals</p>
+      </div>
+      <div class="process-step" data-step="2">
+        <div class="step-num">02</div>
+        <h4>Design</h4>
+        <p>Crafting the perfect UI</p>
+      </div>
+      <div class="process-step" data-step="3">
+        <div class="step-num">03</div>
+        <h4>Development</h4>
+        <p>Building with precision</p>
+      </div>
+      <div class="process-step" data-step="4">
+        <div class="step-num">04</div>
+        <h4>Testing</h4>
+        <p>Quality assurance checks</p>
+      </div>
+      <div class="process-step" data-step="5">
+        <div class="step-num">05</div>
+        <h4>Launch</h4>
+        <p>Deploying to production</p>
+      </div>
+      <div class="process-step" data-step="6">
+        <div class="step-num">06</div>
+        <h4>Support</h4>
+        <p>Ongoing maintenance</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">TESTIMONIALS</p>
+      <h2>What Our Clients <span class="gradient-text">Say</span></h2>
+      <p>Real feedback from businesses we have helped succeed</p>
+      <div class="line"></div>
+    </div>
+  </div>
+  <div class="testimonial-track" id="testimonialTrack"></div>
+</section>
+
+<!-- Clients Section -->
+<section class="clients-section" id="clients">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">TRUSTED BY</p>
+      <h2>Our <span class="gradient-text">Clients</span></h2>
+      <div class="line"></div>
+    </div>
+  </div>
+  <div class="marquee-wrapper">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section class="founder" id="founder">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">MEET THE TEAM</p>
+      <h2>The Visionaries <span class="gradient-text">Behind Fetch360&#176;</span></h2>
+      <div class="line"></div>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+          <div class="photo" style="background:linear-gradient(135deg,#D4A843,#F5D77A);overflow:hidden;display:flex;align-items:center;justify-content:center">
+            <img src="assets/images/founder.jpg" alt="Tuaha Ibn Rafi" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:2">
+          </div>
+        <h3>Tuaha Ibn Rafi</h3>
+        <p class="designation mono">Founder &amp; CEO</p>
+        <p>With a passion for technology and a vision for digital transformation, Tuaha founded Fetch360&#176; Solution to bridge the gap between businesses and the digital world.</p>
+        <div class="social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="team-card reveal">
+          <div class="photo" style="background:linear-gradient(135deg,#D4A843,#F5D77A);overflow:hidden;display:flex;align-items:center;justify-content:center">
+            <img src="assets/images/cofounder.jpg" alt="Syed Bariq" style="width:100%;height:100%;object-fit:cover;position:relative;z-index:2">
+          </div>
+        <h3>Syed Bariq</h3>
+        <p class="designation mono">Co-Founder &amp; Director</p>
+        <p>Playing a pivotal role in shaping the company's technical vision and operational strategy. Together with the founder, they have built Fetch360&#176; into a trusted partner for businesses seeking cutting-edge digital solutions.</p>
+        <div class="social-links">
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="section-title reveal">
+      <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">GET IN TOUCH</p>
+      <h2>Start Your <span class="gradient-text">Project</span></h2>
+      <p>Ready to transform your business? Let's talk about your next project</p>
+      <div class="line"></div>
+    </div>
+    <div class="contact-grid">
+      <form class="contact-form reveal" id="contactForm" novalidate>
+        <div class="form-group">
+          <label class="mono">Your Name</label>
+          <input type="text" name="name" placeholder="John Doe" required>
+          <span class="error">Please enter your name</span>
+        </div>
+        <div class="form-group">
+          <label class="mono">Email Address</label>
+          <input type="email" name="email" placeholder="john@example.com" required>
+          <span class="error">Please enter a valid email</span>
+        </div>
+        <div class="form-group">
+          <label class="mono">Subject</label>
+          <input type="text" name="subject" placeholder="Project Inquiry" required>
+          <span class="error">Please enter a subject</span>
+        </div>
+        <div class="form-group">
+          <label class="mono">Message</label>
+          <textarea name="message" placeholder="Tell us about your project..." required></textarea>
+          <span class="error">Please enter your message</span>
+        </div>
+        <div class="form-success" id="formSuccess">
+          <i class="fas fa-check-circle"></i> Redirecting you to WhatsApp...
+        </div>
+        <button type="submit" class="btn btn-primary magnetic-btn">
+          <i class="fab fa-whatsapp"></i> Send on WhatsApp
+        </button>
+      </form>
+      <div class="contact-info-cards reveal">
+        <a href="https://wa.me/923162770208?text=Hi%20Fetch360%C2%B0%20Solution%2C%20I%20want%20to%20discuss%20a%20project." target="_blank" class="info-card" style="text-decoration:none;color:inherit">
+          <div class="icon" style="background:var(--gradient)"><i class="fab fa-whatsapp"></i></div>
+          <div>
+            <h4>WhatsApp Us</h4>
+            <p>+92 316 2770208</p>
+          </div>
+        </a>
+        <div class="info-card">
+          <div class="icon"><i class="fas fa-phone"></i></div>
+          <div>
+            <h4>Call Us</h4>
+            <p>+92 316 2770208</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="icon"><i class="fas fa-envelope"></i></div>
+          <div>
+            <h4>Email Us</h4>
+            <p>info@fetch360solution.com</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <h4>Visit Us</h4>
+            <p>Office #123, Tech Hub, Karachi, Pakistan</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="icon"><i class="fas fa-clock"></i></div>
+          <div>
+            <h4>Working Hours</h4>
+            <p>Mon - Sat: 9:00 AM - 7:00 PM</p>
+          </div>
+        </div>
+        <div class="contact-socials">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo" style="display:flex;align-items:center;gap:10px">
+          <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A843"/><stop offset="100%" stop-color="#F5D77A"/></linearGradient></defs><path d="M50 5 L90 20 L90 55 Q90 80 50 95 Q10 80 10 55 L10 20 Z" fill="url(#g3)" opacity="0.2" stroke="url(#g3)" stroke-width="3"/><circle cx="55" cy="45" r="14" fill="none" stroke="url(#g3)" stroke-width="2.5"/><line x1="55" y1="31" x2="55" y2="22" stroke="url(#g3)" stroke-width="2.5" stroke-linecap="round"/><circle cx="55" cy="20" r="2.5" fill="url(#g3)"/><path d="M42 58 L55 45" stroke="url(#g3)" stroke-width="2.5" stroke-linecap="round"/></svg>
+          Fetch360<span style="color:var(--primary)">&#176;</span> Solution
+        </div>
+        <p>360&#176; Digital Solutions for Every Business. We craft cutting-edge web, mobile, and software solutions that drive real results.</p>
+        <div class="contact-socials">
+          <a href="https://wa.me/923162770208" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#hero">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#services">Web Development</a>
+        <a href="#services">App Development</a>
+        <a href="#services">Custom Software</a>
+        <a href="#services">UI/UX Design</a>
+        <a href="#services">SEO &amp; Marketing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#contact">Help Center</a>
+        <a href="#contact">Privacy Policy</a>
+        <a href="#contact">Terms of Service</a>
+        <a href="#contact">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Fetch360<span style="color:var(--primary)">&#176;</span> Solution. All rights reserved.</p>
+      <p>Designed &amp; Developed with <i class="fas fa-heart" style="color:#ef4444"></i> by Fetch360<span style="color:var(--primary)">&#176;</span></p>
+    </div>
+  </div>
+</footer>
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // LOADER
+  // ============================================
+  window.addEventListener('load', function() {
+    var loader = document.getElementById('loader');
+    setTimeout(function() {
+      loader.classList.add('hidden');
+    }, 1200);
+  });
+
+  // ============================================
+  // MOBILE CHECK
+  // ============================================
+  var isMobile = window.innerWidth <= 768;
+  window.addEventListener('resize', function() {
+    isMobile = window.innerWidth <= 768;
+  });
+
+  // ============================================
+  // THREE.JS - 3D Robot
+  // ============================================
+  var canvas = document.getElementById('hero-canvas');
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  var sphereGeometry = new THREE.IcosahedronGeometry(2.2, 2);
+  var sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xD4A843, wireframe: true, transparent: true, opacity: 0.45 });
+  var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  scene.add(sphere);
+
+  var innerGeometry = new THREE.IcosahedronGeometry(1.8, 1);
+  var innerMaterial = new THREE.MeshBasicMaterial({ color: 0xF5D77A, wireframe: true, transparent: true, opacity: 0.25 });
+  var innerSphere = new THREE.Mesh(innerGeometry, innerMaterial);
+  scene.add(innerSphere);
+
+  var coreGeometry = new THREE.IcosahedronGeometry(1.2, 3);
+  var coreMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, wireframe: true, transparent: true, opacity: 0.08 });
+  var coreSphere = new THREE.Mesh(coreGeometry, coreMaterial);
+  scene.add(coreSphere);
+
+  var particleCount = isMobile ? 300 : 800;
+  var particlesGeometry = new THREE.BufferGeometry();
+  var positions = new Float32Array(particleCount * 3);
+  var colors = new Float32Array(particleCount * 3);
+  for (var i = 0; i < particleCount; i++) {
+    var i3 = i * 3;
+    var radius = 3 + Math.random() * 4;
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos((Math.random() * 2) - 1);
+    positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+    positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+    positions[i3 + 2] = radius * Math.cos(phi);
+    var colorChoice = Math.random();
+    if (colorChoice < 0.4) {
+      colors[i3] = 0.831; colors[i3+1] = 0.659; colors[i3+2] = 0.263;
+    } else if (colorChoice < 0.7) {
+      colors[i3] = 0.961; colors[i3+1] = 0.843; colors[i3+2] = 0.478;
+    } else {
+      colors[i3] = 0.58; colors[i3+1] = 0.639; colors[i3+2] = 0.722;
+    }
+  }
+  particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  var particlesMaterial = new THREE.PointsMaterial({ size: 0.04, vertexColors: true, transparent: true, opacity: 0.7, sizeAttenuation: true });
+  var particles = new THREE.Points(particlesGeometry, particlesMaterial);
+  scene.add(particles);
+
+  camera.position.z = 5;
+
+  var mouseX = 0, mouseY = 0;
+  if (!isMobile) {
+    document.addEventListener('mousemove', function(e) {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+  }
+
+  function animateThreeJS() {
+    requestAnimationFrame(animateThreeJS);
+    sphere.rotation.x += 0.003;
+    sphere.rotation.y += 0.005;
+    innerSphere.rotation.x -= 0.002;
+    innerSphere.rotation.y -= 0.004;
+    coreSphere.rotation.x += 0.001;
+    coreSphere.rotation.y -= 0.003;
+    particles.rotation.y += 0.001;
+    if (!isMobile) {
+      camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.02;
+      camera.position.y += (-mouseY * 0.5 - camera.position.y) * 0.02;
+    }
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
+  }
+  animateThreeJS();
+
+  window.addEventListener('resize', function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // ============================================
+  // NAVBAR SCROLL EFFECT
+  // ============================================
+  var navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+  });
+
+  // ============================================
+  // HAMBURGER MOBILE MENU
+  // ============================================
+  var hamburger = document.getElementById('hamburger');
+  var mobileMenu = document.getElementById('mobileMenu');
+  var mobileOverlay = document.getElementById('mobileOverlay');
+
+  function toggleMobileMenu() {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    mobileOverlay.classList.toggle('show');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  }
+  hamburger.addEventListener('click', toggleMobileMenu);
+  mobileOverlay.addEventListener('click', toggleMobileMenu);
+  var mobileLinks = mobileMenu.querySelectorAll('a');
+  for (var m = 0; m < mobileLinks.length; m++) {
+    mobileLinks[m].addEventListener('click', function() {
+      if (mobileMenu.classList.contains('open')) toggleMobileMenu();
+    });
+  }
+
+  // ============================================
+  // INTERSECTION OBSERVER - CSS REveal Animations
+  // ============================================
+  var revealElements = document.querySelectorAll('.reveal');
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  revealElements.forEach(function(el) {
+    revealObserver.observe(el);
+  });
+
+  // ============================================
+  // COUNTER ANIMATION
+  // ============================================
+  var counterCards = document.querySelectorAll('.counter-card .number');
+  var countersAnimated = false;
+  var counterObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !countersAnimated) {
+        countersAnimated = true;
+        counterCards.forEach(function(card) {
+          var target = parseInt(card.getAttribute('data-target'), 10);
+          var suffix = card.getAttribute('data-suffix') || '+';
+          var duration = 2000;
+          var startTime = null;
+          function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            var progress = Math.min((timestamp - startTime) / duration, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            card.textContent = Math.floor(eased * target) + suffix;
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  var countersSection = document.querySelector('.counters');
+  if (countersSection) counterObserver.observe(countersSection);
+
+  // ============================================
+  // PROCESS TIMELINE LINE DRAW
+  // ============================================
+  var processSection = document.querySelector('.process');
+  var processLine = document.getElementById('processLine');
+  var processSteps = document.querySelectorAll('.process-step');
+  var processAnimated = false;
+  var processObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !processAnimated) {
+        processAnimated = true;
+        processLine.classList.add('active');
+        for (var p = 0; p < processSteps.length; p++) {
+          (function(index) {
+            setTimeout(function() {
+              processSteps[index].classList.add('active');
+            }, (index + 1) * 300);
+          })(p);
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+  if (processSection) processObserver.observe(processSection);
+
+  // ============================================
+  // PORTFOLIO FILTER
+  // ============================================
+  var filterTabs = document.querySelectorAll('.filter-tab');
+  var portfolioCards = document.querySelectorAll('.portfolio-card');
+  filterTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var filter = this.getAttribute('data-filter');
+      filterTabs.forEach(function(t) { t.classList.remove('active'); });
+      this.classList.add('active');
+      portfolioCards.forEach(function(card) {
+        var category = card.getAttribute('data-category');
+        if (filter === 'all' || category === filter) {
+          card.classList.remove('hidden-card');
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+          card.style.position = 'relative';
+          card.style.width = '';
+          card.style.height = '';
+          card.style.overflow = '';
+          card.style.pointerEvents = '';
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.8)';
+          card.style.pointerEvents = 'none';
+          setTimeout(function() {
+            card.style.position = 'absolute';
+            card.style.width = '0';
+            card.style.height = '0';
+            card.style.overflow = 'hidden';
+          }, 400);
+        }
+      });
+    });
+  });
+
+  // ============================================
+  // TESTIMONIALS - Dynamic Cards
+  // ============================================
+  var testimonials = [
+    { name: 'Ahmad Khan', role: 'CEO, TechVentures', stars: 5, review: 'Fetch360\u00B0 Solution completely transformed our online presence. Their attention to detail and commitment to quality is unmatched. Highly recommended!', seed: 'ahmad' },
+    { name: 'Sarah Malik', role: 'Marketing Director, BrandCo', stars: 5, review: 'Working with Fetch360\u00B0 was an absolute pleasure. They delivered our e-commerce platform ahead of schedule and exceeded all expectations.', seed: 'sarah' },
+    { name: 'Usman Ali', role: 'Founder, StartupHub', stars: 5, review: 'The mobile app they built for us has received incredible user feedback. Their team is professional, responsive, and truly cares about results.', seed: 'usman' },
+    { name: 'Fatima Riaz', role: 'COO, RetailMax', stars: 5, review: 'From concept to launch, Fetch360\u00B0 guided us every step of the way. Our custom ERP system has streamlined our operations remarkably.', seed: 'fatima' }
+  ];
+  var track = document.getElementById('testimonialTrack');
+  var testimonialsHTML = '';
+  // Duplicate for infinite scroll
+  for (var dup = 0; dup < 2; dup++) {
+    for (var t = 0; t < testimonials.length; t++) {
+      var test = testimonials[t];
+      var starsHTML = '';
+      for (var s = 0; s < test.stars; s++) starsHTML += '<i class="fas fa-star"></i>';
+      testimonialsHTML += '<div class="testimonial-card">' +
+        '<div class="stars">' + starsHTML + '</div>' +
+        '<p class="review">' + test.review + '</p>' +
+        '<div class="client-info">' +
+        '<img class="avatar" src="https://randomuser.me/api/portraits/' + (dup === 0 ? 'men' : 'women') + '/' + (30 + t * 5) + '.jpg" alt="' + test.name + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 50 50%22><rect fill=%22%236366F1%22 width=%2250%22 height=%2250%22/><text x=%2225%22 y=%2232%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2218%22>' + test.name.charAt(0) + '</text></svg>\'">' +
+        '<div>' +
+        '<div class="client-name">' + test.name + '</div>' +
+        '<div class="client-role">' + test.role + '</div>' +
+        '</div></div></div>';
+    }
+  }
+  track.innerHTML = testimonialsHTML;
+
+  // ============================================
+  // CLIENTS MARQUEE - Dynamic Logos
+  // ============================================
+  var clientNames = ['TechVentures', 'BrandCo', 'StartupHub', 'RetailMax', 'CloudNine', 'DataFlow', 'InnovateLab', 'SkyNet'];
+  var marquee = document.getElementById('marqueeTrack');
+  var marqueeHTML = '';
+  // Duplicate for infinite scroll
+  for (var d = 0; d < 2; d++) {
+    for (var c = 0; c < clientNames.length; c++) {
+      marqueeHTML += '<div class="client-logo">' + clientNames[c] + '</div>';
+    }
+  }
+  marquee.innerHTML = marqueeHTML;
+
+  // ============================================
+  // CONTACT FORM VALIDATION
+  // ============================================
+  var contactForm = document.getElementById('contactForm');
+  var formSuccess = document.getElementById('formSuccess');
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var isValid = true;
+    var fields = contactForm.querySelectorAll('.form-group');
+    fields.forEach(function(group) {
+      var input = group.querySelector('input, textarea');
+      var value = input.value.trim();
+      group.classList.remove('has-error');
+      if (!value) {
+        group.classList.add('has-error');
+        isValid = false;
+      } else if (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        group.classList.add('has-error');
+        isValid = false;
+      }
+    });
+    if (isValid) {
+      var nameVal = contactForm.querySelector('input[name="name"]').value.trim();
+      var emailVal = contactForm.querySelector('input[name="email"]').value.trim();
+      var subjectVal = contactForm.querySelector('input[name="subject"]').value.trim();
+      var messageVal = contactForm.querySelector('textarea[name="message"]').value.trim();
+      var waMsg = 'Hi Fetch360° Solution!%0A%0AName: ' + encodeURIComponent(nameVal) + '%0AEmail: ' + encodeURIComponent(emailVal) + '%0ASubject: ' + encodeURIComponent(subjectVal) + '%0AMessage: ' + encodeURIComponent(messageVal);
+      window.open('https://wa.me/923162770208?text=' + waMsg, '_blank');
+      contactForm.style.display = 'none';
+      formSuccess.classList.add('show');
+      setTimeout(function() {
+        contactForm.style.display = 'flex';
+        formSuccess.classList.remove('show');
+        contactForm.reset();
+      }, 3000);
+    }
+  });
+
+  // ============================================
+  // MAGNETIC BUTTON HOVER EFFECT (Desktop)
+  // ============================================
+  if (!isMobile) {
+    var magneticBtns = document.querySelectorAll('.magnetic-btn');
+    magneticBtns.forEach(function(btn) {
+      btn.addEventListener('mousemove', function(e) {
+        var rect = btn.getBoundingClientRect();
+        var x = e.clientX - rect.left - rect.width / 2;
+        var y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = 'translate(' + (x * 0.15) + 'px, ' + (y * 0.15) + 'px) scale(1.02)';
+      });
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // ============================================
+  // CURSOR GLOW EFFECT (Desktop)
+  // ============================================
+  var glowCursor = document.getElementById('glowCursor');
+  if (!isMobile) {
+    glowCursor.style.display = 'block';
+    document.addEventListener('mousemove', function(e) {
+      glowCursor.style.left = e.clientX + 'px';
+      glowCursor.style.top = e.clientY + 'px';
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
