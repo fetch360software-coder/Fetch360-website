@@ -12,13 +12,15 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0B0D1A;--primary:#D4A843;--cyan:#22D3EE;--amber:#D4A843;--text:#F1F5F9;--muted:#94A3B8;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#D4A843,#F5D77A,#D4A843)}
 html{scroll-behavior:smooth}
+::selection{background:rgba(212,168,67,0.3);color:#fff}
+::-moz-selection{background:rgba(212,168,67,0.3);color:#fff}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
 h1,h2,h3,h4,h5,h6{font-family:'Plus Jakarta Sans',sans-serif}
 a{text-decoration:none;color:inherit}
 .container{max-width:1200px;margin:0 auto;padding:0 24px}
 .gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.section-title{text-align:center;margin-bottom:60px}
-.section-title h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;margin-bottom:12px}
+.section-title{text-align:center;margin-bottom:60px;overflow:visible}
+.section-title h2{font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:700;margin-bottom:12px;line-height:1.3;word-wrap:break-word;overflow:visible}
 .section-title p{color:var(--muted);font-size:1rem;max-width:560px;margin:0 auto}
 .section-title .line{width:60px;height:4px;background:var(--gradient);margin:16px auto 0;border-radius:2px}
 .mono{font-family:'JetBrains Mono',monospace}
@@ -68,7 +70,7 @@ a{text-decoration:none;color:inherit}
 .reveal.active{opacity:1;transform:translateY(0)}
 
 /* All sections z-index above canvas */
-section,.footer{position:relative;z-index:1}
+section,.footer{position:relative;z-index:1;overflow:visible}
 section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
 
 /* Hero */
@@ -88,7 +90,7 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
 @keyframes mouseScroll{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(10px)}}
 
 /* About */
-.about{padding:120px 0}
+.about{padding:120px 0;overflow:visible}
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
 .about-text p{color:var(--muted);margin-bottom:20px;line-height:1.8}
 .about-text .founder-line{display:flex;align-items:center;gap:14px;margin-top:24px;padding:18px 22px;background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;backdrop-filter:blur(10px);transition:all .3s}
@@ -150,14 +152,14 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
 /* Process */
 .process{padding:120px 0}
 .process-timeline{display:flex;justify-content:space-between;position:relative;padding:0 20px}
-.process-timeline::before{content:'';position:absolute;top:44px;left:70px;right:70px;height:3px;background:rgba(0,0,0,0.06)}
+.process-timeline::before{content:'';position:absolute;top:44px;left:70px;right:70px;height:3px;background:rgba(255,255,255,0.06)}
 .process-line{position:absolute;top:44px;left:70px;height:3px;width:0;background:var(--gradient);transition:width 2s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px rgba(212,168,67,0.4)}
 .process-line.active{width:calc(100% - 140px)}
 .process-step{text-align:center;position:relative;z-index:2;flex:1}
-.process-step .step-num{width:88px;height:88px;background:var(--bg);border:3px solid rgba(0,0,0,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:700;margin:0 auto 18px;transition:all .6s}
+.process-step .step-num{width:88px;height:88px;background:var(--bg);border:3px solid rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:700;margin:0 auto 18px;transition:all .6s}
 .process-step.active .step-num{border-color:var(--primary);background:linear-gradient(135deg,rgba(212,168,67,0.12),rgba(245,215,122,0.12));box-shadow:0 0 30px rgba(245,215,122,0.25);transform:scale(1.1)}
-.process-step h4{font-size:.95rem;font-weight:600;margin-bottom:6px}
-.process-step p{color:var(--muted);font-size:.8rem}
+.process-step h4{font-size:.95rem;font-weight:600;margin-bottom:6px;line-height:1.4}
+.process-step p{color:var(--muted);font-size:.8rem;line-height:1.5}
 
 /* Testimonials */
 .testimonials{padding:120px 0;overflow:hidden}
@@ -272,8 +274,8 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
 .testimonial-card{min-width:320px}
 .footer-grid{grid-template-columns:1fr}
 .process-step .step-num{width:64px;height:64px;font-size:1rem}
-.process-step h4{font-size:.85rem}
-.process-step p{font-size:.7rem}
+.process-step h4{font-size:.85rem;line-height:1.4}
+.process-step p{font-size:.7rem;line-height:1.5}
 .team-card .photo{width:140px;height:140px}
 .team-card h3{font-size:1.2rem}
 }
@@ -283,6 +285,63 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
 .hero-buttons{flex-direction:column;align-items:center}
 .btn{width:100%;justify-content:center}
 .filter-tab{padding:8px 18px;font-size:.8rem}
+}
+
+/* ===== CHATBOT WIDGET ===== */
+.chatbot-fab{position:fixed;bottom:28px;right:28px;width:60px;height:60px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:9990;box-shadow:0 6px 30px rgba(212,168,67,0.45);transition:all .35s;border:none;color:#fff;font-size:1.5rem}
+.chatbot-fab:hover{transform:scale(1.1) translateY(-3px);box-shadow:0 10px 40px rgba(212,168,67,0.6)}
+.chatbot-fab .fab{pointer-events:none}
+.chatbot-fab .badge{position:absolute;top:-2px;right:-2px;width:18px;height:18px;background:#ef4444;border-radius:50%;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-weight:700;border:2px solid var(--bg)}
+
+.chatbot-window{position:fixed;bottom:100px;right:28px;width:380px;max-height:520px;background:rgba(15,17,30,0.98);border:1px solid var(--glass-border);border-radius:20px;z-index:9989;display:flex;flex-direction:column;overflow:hidden;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,0.5);opacity:0;visibility:hidden;transform:translateY(20px) scale(0.95);transition:all .35s cubic-bezier(.4,0,.2,1)}
+.chatbot-window.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+
+.chatbot-header{padding:18px 20px;background:linear-gradient(135deg,rgba(212,168,67,0.15),rgba(245,215,122,0.08));border-bottom:1px solid var(--glass-border);display:flex;align-items:center;justify-content:space-between}
+.chatbot-header-left{display:flex;align-items:center;gap:12px}
+.chatbot-avatar{width:40px;height:40px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;flex-shrink:0}
+.chatbot-header-info h4{font-size:.95rem;font-weight:600;color:var(--text)}
+.chatbot-header-info span{font-size:.72rem;color:#22c55e;font-family:'JetBrains Mono',monospace}
+.chatbot-close{width:32px;height:32px;background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:.85rem;transition:all .3s;border:none}
+.chatbot-close:hover{background:rgba(239,68,68,0.15);color:#ef4444;border-color:rgba(239,68,68,0.3)}
+
+.chatbot-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.chatbot-messages::-webkit-scrollbar{width:4px}
+.chatbot-messages::-webkit-scrollbar-track{background:transparent}
+.chatbot-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+
+.chat-msg{max-width:85%;padding:12px 16px;border-radius:16px;font-size:.88rem;line-height:1.6;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.chat-msg.bot{background:var(--glass);border:1px solid var(--glass-border);align-self:flex-start;border-bottom-left-radius:4px;color:var(--text)}
+.chat-msg.user{background:linear-gradient(135deg,rgba(212,168,67,0.2),rgba(245,215,122,0.15));border:1px solid rgba(212,168,67,0.25);align-self:flex-end;border-bottom-right-radius:4px;color:var(--text)}
+
+.chat-typing{align-self:flex-start;padding:12px 18px;background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;border-bottom-left-radius:4px;display:flex;gap:5px;align-items:center}
+.chat-typing span{width:7px;height:7px;background:var(--primary);border-radius:50%;animation:typingDot 1.2s ease-in-out infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes typingDot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+
+.chat-wa-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:8px 16px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-radius:20px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;transition:all .3s;text-decoration:none}
+.chat-wa-btn:hover{transform:scale(1.05);box-shadow:0 4px 15px rgba(37,211,102,0.4)}
+
+.chatbot-input{padding:12px 14px;border-top:1px solid var(--glass-border);display:flex;gap:8px;align-items:center;background:rgba(0,0,0,0.2);position:relative}
+.chatbot-input input{flex:1;padding:12px 16px;background:var(--glass);border:1px solid var(--glass-border);border-radius:24px;color:var(--text);font-size:.88rem;outline:none;font-family:'Inter',sans-serif;transition:border-color .3s}
+.chatbot-input input:focus{border-color:var(--primary)}
+.chatbot-input input::placeholder{color:var(--muted)}
+.chatbot-input button{width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;flex-shrink:0}
+.chat-send{background:var(--gradient);color:#fff}
+.chat-send:hover{transform:scale(1.1);box-shadow:0 4px 15px rgba(212,168,67,0.4)}
+.chat-mic{background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:var(--muted)}
+.chat-mic:hover{border-color:var(--primary);color:var(--primary)}
+.chat-mic.listening{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#ef4444;animation:micPulse 1.2s ease-in-out infinite}
+.chat-mic.processing{background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.4);color:#3b82f6;animation:micPulse 0.8s ease-in-out infinite}
+.chat-mic.speaking{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.4);color:#22c55e;animation:micPulse 1s ease-in-out infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.3)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+.chat-mic-label{position:absolute;bottom:calc(100% + 6px);right:0;background:rgba(15,17,30,0.95);border:1px solid var(--glass-border);border-radius:8px;padding:4px 10px;font-size:.7rem;color:var(--primary);font-family:'JetBrains Mono',monospace;white-space:nowrap;pointer-events:none;animation:msgIn .3s ease}
+.chat-mic-unsupported{display:none}
+
+@media(max-width:480px){
+.chatbot-window{right:10px;left:10px;bottom:90px;width:auto;max-height:70vh}
+.chatbot-fab{bottom:20px;right:20px;width:54px;height:54px}
 }
 </style>
 </head>
@@ -394,7 +453,7 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
   <div class="container">
     <div class="section-title reveal">
       <p class="mono" style="color:var(--primary);font-size:.85rem;margin-bottom:8px">ABOUT US</p>
-      <h2>Empowering Businesses <span class="gradient-text">Since 2023</span></h2>
+      <h2>Empowering Businesses <span class="gradient-text">Since 2025</span></h2>
       <div class="line"></div>
     </div>
     <div class="about-grid">
@@ -755,6 +814,7 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
             <p>info@fetch360solution.com</p>
           </div>
         </div>
+        <!--
         <div class="info-card">
           <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
           <div>
@@ -769,6 +829,7 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
             <p>Mon - Sat: 9:00 AM - 7:00 PM</p>
           </div>
         </div>
+        -->
         <div class="contact-socials">
           <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
           <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
@@ -828,6 +889,30 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
     </div>
   </div>
 </footer>
+<!-- Chatbot Widget -->
+<div class="chatbot-fab" id="chatbotFab">
+  <i class="fas fa-comment-dots"></i>
+  <span class="badge" id="chatBadge" style="display:none">1</span>
+</div>
+<div class="chatbot-window" id="chatbotWindow">
+  <div class="chatbot-header">
+    <div class="chatbot-header-left">
+      <div class="chatbot-avatar"><i class="fas fa-robot"></i></div>
+      <div class="chatbot-header-info">
+        <h4>Fetch360 Assistant</h4>
+        <span>● Online</span>
+      </div>
+    </div>
+    <button class="chatbot-close" id="chatbotClose"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="chatbot-messages" id="chatMessages"></div>
+  <div class="chatbot-input">
+    <input type="text" id="chatInput" placeholder="Ask about services, pricing..." autocomplete="off">
+    <button class="chat-mic" id="chatMic" title="Voice Input"><i class="fas fa-microphone"></i></button>
+    <button class="chat-send" id="chatSend"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
 <!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -1123,10 +1208,11 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
   marquee.innerHTML = marqueeHTML;
 
   // ============================================
-  // CONTACT FORM VALIDATION
+  // CONTACT FORM - WHATSAPP AUTO-FILL
   // ============================================
   var contactForm = document.getElementById('contactForm');
   var formSuccess = document.getElementById('formSuccess');
+  var submitBtn = contactForm.querySelector('button[type="submit"]');
   contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
     var isValid = true;
@@ -1144,19 +1230,25 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
       }
     });
     if (isValid) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting to WhatsApp...';
       var nameVal = contactForm.querySelector('input[name="name"]').value.trim();
       var emailVal = contactForm.querySelector('input[name="email"]').value.trim();
       var subjectVal = contactForm.querySelector('input[name="subject"]').value.trim();
       var messageVal = contactForm.querySelector('textarea[name="message"]').value.trim();
       var waMsg = 'Hi Fetch360° Solution!%0A%0AName: ' + encodeURIComponent(nameVal) + '%0AEmail: ' + encodeURIComponent(emailVal) + '%0ASubject: ' + encodeURIComponent(subjectVal) + '%0AMessage: ' + encodeURIComponent(messageVal);
-      window.open('https://wa.me/923162770208?text=' + waMsg, '_blank');
       contactForm.style.display = 'none';
       formSuccess.classList.add('show');
+      setTimeout(function() {
+        window.open('https://wa.me/923162770208?text=' + waMsg, '_blank');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fab fa-whatsapp"></i> Send on WhatsApp';
+      }, 1200);
       setTimeout(function() {
         contactForm.style.display = 'flex';
         formSuccess.classList.remove('show');
         contactForm.reset();
-      }, 3000);
+      }, 4000);
     }
   });
 
@@ -1188,6 +1280,433 @@ section{background:rgba(11,13,26,0.92);backdrop-filter:blur(2px)}
       glowCursor.style.left = e.clientX + 'px';
       glowCursor.style.top = e.clientY + 'px';
     });
+  }
+
+  // ============================================
+  // AI CHATBOT - RULE-BASED (NO API) - MULTI-LANGUAGE
+  // ============================================
+  var chatKnowledge = [
+    {
+      keywords: ['price','pricing','cost','budget','quote','estimate','how much'],
+      keywordsUr: ['qeemat','kitna','kitne','charges','rates','price','budget','kharch'],
+      answer: 'Our web development projects start from $500. App development from $1,000. Custom software from $2,000. For a detailed quote, let\'s chat on WhatsApp!',
+      answerUr: 'Hamare web development projects $500 se shuru hote hain. App development $1,000 se. Custom software $2,000 se. Detailed quote ke liye WhatsApp pe baat karein!'
+    },
+    {
+      keywords: ['services','what do you offer','offer','service','solutions'],
+      keywordsUr: ['kya karte','service','services','kya service','solutions','kya karte ho'],
+      answer: 'We offer: Web Development, App Development, Custom Software, UI/UX Design, E-Commerce Solutions, and SEO & Digital Marketing.',
+      answerUr: 'Hum yeh services dete hain: Web Development, App Development, Custom Software, UI/UX Design, E-Commerce Solutions, aur SEO & Digital Marketing.'
+    },
+    {
+      keywords: ['timeline','how long','time','duration','deadline','deliver','schedule'],
+      keywordsUr: ['kitna waqt','time','kab tak','kitne din','deadline','duration'],
+      answer: 'Typical projects take 2-6 weeks depending on complexity. Simple websites: 1-2 weeks. Full apps: 4-6 weeks.',
+      answerUr: 'Aam tor pe projects 2-6 weeks mein complete hote hain. Simple websites: 1-2 weeks. Full apps: 4-6 weeks.'
+    },
+    {
+      keywords: ['contact','phone','whatsapp','call','number','reach'],
+      keywordsUr: ['raabta','raqam','phone','whatsapp','call','number','contact'],
+      answer: 'Reach us at:\nWhatsApp: +92 316 2770208\nEmail: info@fetch360solution.com\nLocation: Karachi, Pakistan',
+      answerUr: 'Humein reach karein:\nWhatsApp: +92 316 2770208\nEmail: info@fetch360solution.com\nLocation: Karachi, Pakistan'
+    },
+    {
+      keywords: ['location','address','where','office','visit'],
+      keywordsUr: ['kahan','location','address','office','kahan ho','pata'],
+      answer: 'We are available worldwide! Reach us on WhatsApp or email us at info@fetch360solution.com for a quick response.',
+      answerUr: 'Hum duniya bhar mein available hain! WhatsApp pe message karein ya info@fetch360solution.com pe email karein.'
+    },
+    {
+      keywords: ['web','website','web development','site','landing page'],
+      keywordsUr: ['website','web','site','landing page','web development'],
+      answer: 'We build responsive, SEO-optimized websites using modern frameworks. From landing pages to full web apps.',
+      answerUr: 'Hum responsive, SEO-optimized websites banate hain modern frameworks se. Landing pages se le kar full web apps tak.'
+    },
+    {
+      keywords: ['app','mobile','android','ios','application','app development'],
+      keywordsUr: ['app','mobile','android','ios','application','app development'],
+      answer: 'We develop native and cross-platform mobile apps for iOS and Android using React Native, Flutter, and native technologies.',
+      answerUr: 'Hum native aur cross-platform mobile apps banate hain iOS aur Android ke liye React Native, Flutter aur native technologies se.'
+    },
+    {
+      keywords: ['software','custom','erp','crm','software development','system'],
+      keywordsUr: ['software','custom','erp','crm','system','software banwana'],
+      answer: 'We build custom software solutions including ERP systems, CRM tools, dashboards, and automation tools.',
+      answerUr: 'Hum custom software solutions banate hain jismein ERP systems, CRM tools, dashboards aur automation tools shamil hain.'
+    },
+    {
+      keywords: ['design','ui','ux','ui/ux','designing','interface','figma'],
+      keywordsUr: ['design','ui','ux','designing','interface','figma'],
+      answer: 'Our UI/UX design process is research-driven. Wireframes, Mockups, Prototypes - we do it all.',
+      answerUr: 'Hamara UI/UX design process research-based hai. Wireframes, Mockups, Prototypes - sab kuch banate hain.'
+    },
+    {
+      keywords: ['seo','marketing','digital marketing','search engine','promotion'],
+      keywordsUr: ['seo','marketing','digital marketing','promotion','rank'],
+      answer: 'We offer data-driven SEO strategies and digital marketing campaigns to boost your online visibility.',
+      answerUr: 'Hum data-driven SEO strategies aur digital marketing campaigns dete hain aapki online visibility barhane ke liye.'
+    },
+    {
+      keywords: ['ecommerce','e-commerce','online store','shop','shopping','store'],
+      keywordsUr: ['ecommerce','store','online store','shop','shopping','dukkan'],
+      answer: 'We build full-featured e-commerce stores with secure payment integration, inventory management, and analytics.',
+      answerUr: 'Hum full-featured e-commerce stores banate hain secure payment integration, inventory management aur analytics ke sath.'
+    },
+    {
+      keywords: ['hello','hi','hey','salam','assalam','aoa','sup','howdy'],
+      keywordsUr: ['salam','assalam','aoa','kaise','kaisay','kya haal'],
+      answer: 'Hello! Welcome to Fetch360 Solution. How can I help you today? Ask me about our services, pricing, or timeline!',
+      answerUr: 'Assalam o Alaikum! Fetch360 Solution mein welcome hai. Aaj mein aapki kya madad kar sakta hoon? Services, pricing ya timeline ke baare mein poochein!'
+    },
+    {
+      keywords: ['thank','thanks','shukriya','jazakallah','appreciate'],
+      keywordsUr: ['shukriya','jazakallah','thanks','meherbani','banda'],
+      answer: 'You\'re welcome! If you need anything else, feel free to ask. For detailed discussions, chat with us on WhatsApp.',
+      answerUr: 'Jazakallah! Agar aur kuch chahiye toh zaroor poochein. Detailed discussion ke liye WhatsApp pe baat karein.'
+    },
+    {
+      keywords: ['who','about','tell me about','company','your company','fetch360'],
+      keywordsUr: ['company','tumhari company','about','kaun ho','kya hai','fetch360'],
+      answer: 'Fetch360 Solution is a digital agency founded in 2025 by Tuaha Ibn Rafi. We have delivered 50+ projects with 30+ happy clients.',
+      answerUr: 'Fetch360 Solution ek digital agency hai jo 2025 mein Tuaha Ibn Rafi ne founded ki. Humne 50+ projects deliver kiye hain 30+ khush clients ke sath.'
+    }
+  ];
+
+  var chatFallback = 'I\'m not sure about that. Let\'s connect on WhatsApp for a detailed answer!';
+  var chatFallbackUr = 'Mujhe is baare mein yaqeen nahi. WhatsApp pe detail mein baat karein!';
+  var chatWhatsApp = 'https://wa.me/923162770208?text=' + encodeURIComponent('Hi Fetch360 Solution! I need help.');
+
+  // Language detection
+  function detectLanguage(text) {
+    var urduScript = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+    if (urduScript.test(text)) return 'ur';
+    var romanUrduWords = ['kya','kaisay','kaise','kitna','kitne','qeemat','waqt','kab','tak','ho','hai','hain','mein','ka','ki','ke','ko','se','ne','ye','woh','aur','ya','toh','phir','bhi','sirf','abhi','chal','batao','sunao','bolo','bol','samajh','pata','raabta','raqam','shukriya','jazakallah','meherbani','banda','kahan','karo','karte','karti','hoga','hogi','honge','hote','thay','tha',' thi','pe','par','under','wala','wali','wale','apna','apni','apne','mera','meri','mere','tera','teri','tere','uska','uski','uske'];
+    var lower = text.toLowerCase().trim();
+    var words = lower.split(/\s+/);
+    var urduCount = 0;
+    for (var w = 0; w < words.length; w++) {
+      if (romanUrduWords.indexOf(words[w]) !== -1) urduCount++;
+    }
+    if (urduCount >= 2 || (words.length <= 3 && urduCount >= 1)) return 'ur';
+    return 'en';
+  }
+
+  function matchChatAnswer(input, lang) {
+    var lower = input.toLowerCase();
+    for (var i = 0; i < chatKnowledge.length; i++) {
+      var kwList = lang === 'ur' ? chatKnowledge[i].keywordsUr : chatKnowledge[i].keywords;
+      for (var j = 0; j < kwList.length; j++) {
+        if (lower.indexOf(kwList[j]) !== -1) {
+          return lang === 'ur' ? chatKnowledge[i].answerUr : chatKnowledge[i].answer;
+        }
+      }
+    }
+    for (var i2 = 0; i2 < chatKnowledge.length; i2++) {
+      var kwList2 = chatKnowledge[i2].keywords.concat(chatKnowledge[i2].keywordsUr);
+      for (var j2 = 0; j2 < kwList2.length; j2++) {
+        if (lower.indexOf(kwList2[j2]) !== -1) {
+          return lang === 'ur' ? chatKnowledge[i2].answerUr : chatKnowledge[i2].answer;
+        }
+      }
+    }
+    return null;
+  }
+
+  var chatFab = document.getElementById('chatbotFab');
+  var chatWindow = document.getElementById('chatbotWindow');
+  var chatClose = document.getElementById('chatbotClose');
+  var chatMessages = document.getElementById('chatMessages');
+  var chatInput = document.getElementById('chatInput');
+  var chatSendBtn = document.getElementById('chatSend');
+  var chatBadge = document.getElementById('chatBadge');
+  var chatOpened = false;
+  var lastDetectedLang = 'en';
+
+  function addChatMessage(text, type, showWhatsApp) {
+    var msg = document.createElement('div');
+    msg.className = 'chat-msg ' + type;
+    msg.textContent = text;
+    chatMessages.appendChild(msg);
+    if (showWhatsApp) {
+      var waLink = document.createElement('a');
+      waLink.href = chatWhatsApp;
+      waLink.target = '_blank';
+      waLink.className = 'chat-wa-btn';
+      waLink.innerHTML = '<i class="fab fa-whatsapp"></i> Chat on WhatsApp';
+      chatMessages.appendChild(waLink);
+    }
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function showTyping() {
+    var typing = document.createElement('div');
+    typing.className = 'chat-typing';
+    typing.id = 'chatTyping';
+    typing.innerHTML = '<span></span><span></span><span></span>';
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function removeTyping() {
+    var t = document.getElementById('chatTyping');
+    if (t) t.remove();
+  }
+
+  function sendChatMessage() {
+    var text = chatInput.value.trim();
+    if (!text) return;
+    addChatMessage(text, 'user');
+    chatInput.value = '';
+    var lang = detectLanguage(text);
+    lastDetectedLang = lang;
+    showTyping();
+    setTimeout(function() {
+      removeTyping();
+      var answer = matchChatAnswer(text, lang);
+      if (answer) {
+        addChatMessage(answer, 'bot', true);
+      } else {
+        addChatMessage(lang === 'ur' ? chatFallbackUr : chatFallback, 'bot', true);
+      }
+    }, 800 + Math.random() * 700);
+  }
+
+  chatFab.addEventListener('click', function() {
+    chatOpened = true;
+    chatWindow.classList.add('open');
+    chatBadge.style.display = 'none';
+    chatInput.focus();
+    if (chatMessages.children.length === 0) {
+      setTimeout(function() {
+        addChatMessage('Hi! I\'m Fetch360 Assistant. Ask me about our services, pricing, or timeline!', 'bot', false);
+      }, 400);
+    }
+  });
+
+  chatClose.addEventListener('click', function() {
+    chatWindow.classList.remove('open');
+  });
+
+  chatSendBtn.addEventListener('click', sendChatMessage);
+  chatInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendChatMessage();
+  });
+
+  setTimeout(function() {
+    if (!chatOpened) chatBadge.style.display = 'flex';
+  }, 3000);
+
+  // ============================================
+  // VOICE AGENT - WEB SPEECH API (FIXED)
+  // ============================================
+  var chatMicBtn = document.getElementById('chatMic');
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var speechSupported = !!SpeechRecognition;
+  var synth = window.speechSynthesis || null;
+  var isListening = false;
+  var isSpeaking = false;
+  var isProcessing = false;
+  var recognition = null;
+  var silenceTimer = null;
+  var micStateLabel = null;
+
+  function setMicState(state) {
+    chatMicBtn.classList.remove('listening', 'processing', 'speaking');
+    if (state === 'listening') {
+      chatMicBtn.classList.add('listening');
+      chatMicBtn.title = 'Listening... Click to stop';
+    } else if (state === 'processing') {
+      chatMicBtn.classList.add('processing');
+      chatMicBtn.title = 'Processing...';
+    } else if (state === 'speaking') {
+      chatMicBtn.classList.add('speaking');
+      chatMicBtn.title = 'Speaking... Click to mute';
+    } else {
+      chatMicBtn.title = 'Click to speak';
+    }
+  }
+
+  function updateMicLabel(text) {
+    if (!micStateLabel) {
+      micStateLabel = document.createElement('div');
+      micStateLabel.className = 'chat-mic-label';
+      chatMicBtn.parentElement.appendChild(micStateLabel);
+    }
+    micStateLabel.textContent = text;
+    micStateLabel.style.display = text ? 'block' : 'none';
+  }
+
+  if (!speechSupported) {
+    chatMicBtn.classList.add('chat-mic-unsupported');
+    chatMicBtn.title = 'Voice not supported on this browser';
+  }
+
+  function startRecognition() {
+    if (!speechSupported || isSpeaking || isProcessing) return;
+    if (recognition) {
+      try { recognition.abort(); } catch(e) {}
+    }
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    recognition.lang = 'en-US';
+
+    var finalTranscript = '';
+    var silenceCount = 0;
+
+    recognition.onstart = function() {
+      isListening = true;
+      finalTranscript = '';
+      silenceCount = 0;
+      setMicState('listening');
+      updateMicLabel('Listening...');
+    };
+
+    recognition.onresult = function(event) {
+      var interim = '';
+      for (var r = event.resultIndex; r < event.results.length; r++) {
+        if (event.results[r].isFinal) {
+          finalTranscript += event.results[r][0].transcript;
+          silenceCount = 0;
+        } else {
+          interim += event.results[r][0].transcript;
+        }
+      }
+      if (interim) {
+        chatInput.value = finalTranscript || interim;
+      }
+      if (finalTranscript) {
+        clearTimeout(silenceTimer);
+        silenceTimer = setTimeout(function() {
+          if (isListening && finalTranscript.trim()) {
+            try { recognition.stop(); } catch(e) {}
+            chatInput.value = finalTranscript.trim();
+            setMicState('processing');
+            updateMicLabel('Processing...');
+            isProcessing = true;
+            setTimeout(function() {
+              sendChatMessage();
+              isProcessing = false;
+              setMicState('idle');
+              updateMicLabel('');
+            }, 300);
+          }
+        }, 1800);
+      }
+    };
+
+    recognition.onerror = function(event) {
+      isListening = false;
+      clearTimeout(silenceTimer);
+      if (event.error === 'not-allowed') {
+        addChatMessage('Microphone access denied. Please allow microphone permissions.', 'bot', false);
+        setMicState('idle');
+        updateMicLabel('');
+      } else if (event.error === 'no-speech') {
+        updateMicLabel('');
+        setMicState('idle');
+      } else if (event.error !== 'aborted') {
+        updateMicLabel('Error. Tap to retry.');
+        setMicState('idle');
+      }
+    };
+
+    recognition.onend = function() {
+      isListening = false;
+      clearTimeout(silenceTimer);
+      if (!isProcessing && !isSpeaking) {
+        setMicState('idle');
+        updateMicLabel('');
+      }
+    };
+
+    try {
+      recognition.start();
+    } catch(e) {
+      setMicState('idle');
+      updateMicLabel('');
+    }
+  }
+
+  function stopRecognition() {
+    if (recognition && isListening) {
+      try { recognition.stop(); } catch(e) {}
+    }
+    isListening = false;
+    clearTimeout(silenceTimer);
+  }
+
+  chatMicBtn.addEventListener('click', function() {
+    if (!speechSupported) {
+      addChatMessage('Voice input is not supported on this browser. Try Chrome or Edge.', 'bot', false);
+      return;
+    }
+    if (isSpeaking) {
+      synth.cancel();
+      isSpeaking = false;
+      setMicState('idle');
+      updateMicLabel('');
+      return;
+    }
+    if (isListening) {
+      stopRecognition();
+      setMicState('idle');
+      updateMicLabel('');
+    } else {
+      startRecognition();
+    }
+  });
+
+  // Text-to-Speech with language matching
+  function speakText(text, lang) {
+    if (!synth) return;
+    synth.cancel();
+    isSpeaking = true;
+    setMicState('speaking');
+    updateMicLabel('Speaking...');
+    stopRecognition();
+
+    var utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 0.8;
+    utterance.lang = lang === 'ur' ? 'ur-PK' : 'en-US';
+
+    var voices = synth.getVoices();
+    for (var v = 0; v < voices.length; v++) {
+      if (voices[v].lang.indexOf(utterance.lang.split('-')[0]) !== -1) {
+        utterance.voice = voices[v];
+        break;
+      }
+    }
+
+    utterance.onend = function() {
+      isSpeaking = false;
+      setMicState('idle');
+      updateMicLabel('');
+    };
+    utterance.onerror = function() {
+      isSpeaking = false;
+      setMicState('idle');
+      updateMicLabel('');
+    };
+    synth.speak(utterance);
+  }
+
+  var _origAddChatMsg = addChatMessage;
+  addChatMessage = function(text, type, showWhatsApp) {
+    _origAddChatMsg(text, type, showWhatsApp);
+    if (type === 'bot' && synth) {
+      speakText(text, lastDetectedLang);
+    }
+  };
+
+  if (synth) {
+    synth.getVoices();
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = function() { synth.getVoices(); };
+    }
   }
 
 })();
